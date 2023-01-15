@@ -1,7 +1,4 @@
-# MUIIAMetaheuristicos
-
-Estudio práctico de un algoritmo genético básico sobre la suma del subconjunto
-
+# Estudio práctico de un algoritmo genético básico sobre la suma del subconjunto
 
 ## Enunciado:
 
