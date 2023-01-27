@@ -7,6 +7,9 @@
 
 package ga.ssGA;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Exe {
   public static void main(String args[]) throws Exception {
     // PARAMETERS SUBSETSUM
@@ -42,10 +45,22 @@ public class Exe {
     Algorithm ga; // The ssGA being used
     ga = new Algorithm(problem, popsize, gn, gl, pc, pm);
 
+    // Control steps
+    List<String[]> allStepLog = new ArrayList<String[]>();
+    String[] header = new String[] { "step", "bestf" };
+    allStepLog.add(header);
+
+
     for (int step = 0; step < MAX_ISTEPS; step++) {
       ga.go_one_step();
+
       System.out.println("Step: " + step + " | Best fintess: " + ga.get_bestf());
-      // System.out.println(ga.get_bestf());
+
+      // Parse to string
+      String stepStr = Integer.toString(step);
+      String bestFitness = Double.toString(ga.get_bestf());
+      String[] stepLog = new String[]{stepStr,bestFitness};
+      allStepLog.add(stepLog);
 
       if ((problem.tf_known()) && (ga.get_solution()).get_fitness() >= problem.get_target_fitness()) {
         System.out.print("Solution Found! After ");
@@ -53,7 +68,6 @@ public class Exe {
         System.out.println(" evaluations");
         break;
       }
-
     }
 
     // Print the solution
@@ -67,6 +81,10 @@ public class Exe {
     System.out.println("Final fitness: " + (ga.get_solution()).get_fitness());
 
     // TODO: Save results on csv
+
+    CsvManager csv = new CsvManager();
+    csv.writeCSV(allStepLog);
+    
     // TODO: Generate plots each step & general pop
     // TODO: sys to execute N experiments
   }
