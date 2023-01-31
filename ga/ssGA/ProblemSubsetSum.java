@@ -48,7 +48,7 @@ public class ProblemSubsetSum extends Problem {
                           6669, 6334};
   // private static int subset[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14, -15};
   private static int C = 300500; // 300500 | 20
-  private static int CLLength = 30;
+  private static int CLLength = subset.length; // 30 | 128
   
   private double SUBSET_SUM(Individual indiv)
   {
@@ -56,33 +56,29 @@ public class ProblemSubsetSum extends Problem {
     int i;
     double fitness = 0.0;
 	
-    if(CL!=CLLength)	
+    if(CL!=CLLength) {
       System.out.println("Length mismatch error in Subset sum function.");
+    }
 
     // Calculate fitness
     for( i=0; i<CL; i++ )
     {
-      // System.out.print("Calculating fitness ...");
-      // Chromosome chromT = indiv.get_chromosome();
-      // System.out.print(" - Actual fitness : " + fitness + " ");
-      // chromT.print();
-      // System.out.print("Operation : " + indiv.get_allele(i) + " * " + subset[i]);
       fitness += indiv.get_allele(i)*subset[i];
-      // System.out.println(fitness + " - ");
     }
 
-    System.out.println("Final fitness ==> " + fitness +  " | C = " + C);
 
 
     if (fitness>C)
     {
-      System.out.print("Fitness is greater than C. " + fitness + " > " + C + " ");
+      // System.out.print("Fitness is greater than C. " + fitness + " > " + C + " ");
       fitness = C - fitness*0.1;
       if(fitness<0.0) {
-        System.out.print("Fitness is < 0.00 " + fitness + " < " + 0 + " ");
+        // System.out.print("Fitness is < 0.00 " + fitness + " < " + 0 + " ");
         fitness=0.0;
       }
-      System.out.println("Final fitness modified ==> " + fitness);
+      // System.out.println("Final fitness modified ==> " + fitness);
+    } else {
+      // System.out.println("Final fitness ==> " + fitness +  " | C = " + C);
     }
 
     indiv.set_fitness(fitness);

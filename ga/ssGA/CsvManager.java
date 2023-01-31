@@ -15,7 +15,7 @@ import java.util.List;
 /**
  *
  * @author  Alejandro
- * @version 0.1
+ * @version 1.0
  */
 
 public class CsvManager {
@@ -28,19 +28,20 @@ public class CsvManager {
     CSV_FILE_NAME = fileName + ".csv";
   }
 
-  public void writeCSV(List<String[]> data) throws IOException {
+  public void overwriteData(List<String[]> data) throws IOException {
     String filePath = CSV_PATH + CSV_FILE_NAME;
 
     try (
-        Writer writer = Files.newBufferedWriter(Paths.get(filePath));
+      Writer writer = Files.newBufferedWriter(Paths.get(filePath));
 
-        CSVWriter csvWriter = new CSVWriter(writer,
-                CSVWriter.DEFAULT_SEPARATOR,
-                CSVWriter.NO_QUOTE_CHARACTER,
-                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                CSVWriter.DEFAULT_LINE_END);
+      CSVWriter csvWriter = new CSVWriter(writer,
+              CSVWriter.DEFAULT_SEPARATOR,
+              CSVWriter.NO_QUOTE_CHARACTER,
+              CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+              CSVWriter.DEFAULT_LINE_END);
     ) {
       csvWriter.writeAll(data);
+      // csvWriter.close(); //close the writer
     }
   }
 }
