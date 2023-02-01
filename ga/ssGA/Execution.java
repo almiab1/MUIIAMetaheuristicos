@@ -15,6 +15,7 @@ public class Execution {
     Problem PROBLEM; // The problem being solved
     Algorithm GA; // The ssGA being used
     int EXEC_ID;
+    CsvManager CSV;
 
     public Execution(int execId,int gn,int gl ,double pc,double tf,long max_steps) {
         // PARAMETERS Execution
@@ -26,6 +27,7 @@ public class Execution {
         TF = tf; // Target fitness beign sought
         MAX_ISTEPS = max_steps;
         EXEC_ID = execId;
+        CSV = new CsvManager("result"+execId,"executions/");
     }
 
     private void debug(Algorithm ga,int gn, int gl) throws Exception {
@@ -40,31 +42,41 @@ public class Execution {
         System.out.println(" After " + PROBLEM.get_fitness_counter() + " evaluation");
     }
 
-    public List<String[]> run() throws Exception {
+    public String[] run() throws Exception {
+        // Init run time
+        long startTime = System.currentTimeMillis();
 
+        // Create the problem
         PROBLEM = new ProblemSubsetSum();
-
+        // Set parameters
         PROBLEM.set_geneN(GN);
         PROBLEM.set_geneL(GL);
         PROBLEM.set_target_fitness(TF);
-
+        // Create GA
         GA = new Algorithm(PROBLEM, POP_SIZE, GN, GL, PC, PM);
 
         // Control steps
-        List<String[]> allStepLog = new ArrayList<String[]>();
+        String execStr = "";
+        String stepStr= "";
+        String bestFitness= "";
+        List<String[]> execStepLog = new ArrayList<String[]>();
 
+        // Add header to control list
+        String[] header = new String[] {"exec","step","fitness"}; // declare header
+        execStepLog.add(header); // add headers to list
+        
         // Init search
         for (int step = 0; step < MAX_ISTEPS; step++) {
             // next step
             GA.go_one_step();
-
+            
             // Parse to string
-            String exec_str = Integer.toString(EXEC_ID);
-            String stepStr = Integer.toString(step);
-            String bestFitness = Double.toString(GA.get_bestf());
-            String[] stepLog = new String[]{exec_str,stepStr,bestFitness};
-            allStepLog.add(stepLog);
-
+            execStr = Integer.toString(EXEC_ID);
+            stepStr = Integer.toString(step);
+            bestFitness = Double.toString(GA.get_bestf());
+            String[] stepLog = new String[]{execStr,stepStr,bestFitness};
+            execStepLog.add(stepLog);
+            
             if ((PROBLEM.tf_known()) && (GA.get_solution()).get_fitness() >= PROBLEM.get_target_fitness()) {
                 // System.out.print("Solution Found! After ");
                 // System.out.print(PROBLEM.get_fitness_counter());
@@ -72,11 +84,20 @@ public class Execution {
                 break;
             }
         }
-
+        
         // Print the solution
         debug(GA,GN,GL);
-
+        
+        // Save to csv
+        CSV.overwriteData(execStepLog);
+        
+        // Calcule execution time in mili seconds
+        long endTime = System.currentTimeMillis();
+        String durationStr = Long.toString(endTime - startTime);
+        String stepsStr = Long.toString(PROBLEM.get_fitness_counter());
+        
         // return run outputs
-        return allStepLog;
-    }
-}
+        String[] execLog = new String[]{execStr,bestFitness,stepsStr,durationStr};
+        return execLog;
+    } // end run
+} // END OF CLASS: Execution
