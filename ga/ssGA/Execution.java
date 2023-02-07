@@ -59,10 +59,12 @@ public class Execution {
         String execStr = "";
         String stepStr= "";
         String bestFitness= "";
+        String worstFitness= "";
+        String avgFitness= "";
         List<String[]> execStepLog = new ArrayList<String[]>();
 
         // Add header to control list
-        String[] header = new String[] {"exec","step","fitness"}; // declare header
+        String[] header = new String[] {"exec","step","bestf","worstf","avgf"}; // declare header
         execStepLog.add(header); // add headers to list
         
         // Init search
@@ -74,7 +76,9 @@ public class Execution {
             execStr = Integer.toString(EXEC_ID);
             stepStr = Integer.toString(step);
             bestFitness = Double.toString(GA.get_bestf());
-            String[] stepLog = new String[]{execStr,stepStr,bestFitness};
+            worstFitness = Double.toString(GA.get_worstf());
+            avgFitness = Double.toString(GA.get_avgf());
+            String[] stepLog = new String[]{execStr,stepStr,bestFitness,worstFitness,avgFitness};
             execStepLog.add(stepLog);
             
             if ((PROBLEM.tf_known()) && (GA.get_solution()).get_fitness() >= PROBLEM.get_target_fitness()) {
@@ -97,7 +101,7 @@ public class Execution {
         String stepsStr = Long.toString(PROBLEM.get_fitness_counter());
         
         // return run outputs
-        String[] execLog = new String[]{execStr,bestFitness,stepsStr,durationStr};
+        String[] execLog = new String[]{execStr,bestFitness,worstFitness,avgFitness,stepsStr,durationStr};
         return execLog;
     } // end run
 } // END OF CLASS: Execution

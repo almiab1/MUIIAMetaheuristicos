@@ -27,7 +27,7 @@ public class Exe {
     List<String[]> allExecLogs = new ArrayList<String[]>(); // Control executions
 
     // Add header to control list
-    String[] header = new String[] {"exec","bestf", "endstep","duration"}; // declare header
+    String[] header = new String[] {"exec","bestf","worstf","avgf","endstep","duration"}; // declare header
     allExecLogs.add(header); // add headers to list
     
     // Run executions
