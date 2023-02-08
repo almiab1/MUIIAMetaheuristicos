@@ -6,6 +6,8 @@
 
 package ga.ssGA;
 
+import java.lang.reflect.Array;
+
 /**
  *
  * @author  Alejandro
@@ -21,7 +23,6 @@ public class ProblemSubsetSum extends Problem {
   public double Evaluate(Individual Indiv)
   {
     return SUBSET_SUM(Indiv);
-
   }
 
   // ------------------------------------------------------------------------------
@@ -31,6 +32,9 @@ public class ProblemSubsetSum extends Problem {
   // SUBSET SUM PROBLEM	- NPcomplete, Jelasity and Dombi (Artificial Intelligence)
   // Parameter ranges: 0 and 1 (bit string)
   // Strlen = 128 bits
+  private Integer[] generate_population () {
+    return new Integer[0];
+  }
   private static int subset[]={2902, 5235, 357, 6058, 4846, 8280, 1295, 181, 3264, 
                           7285, 8806, 2344, 9203, 6806, 1511, 2172, 843, 4697, 
                           3348, 1866, 5800, 4094, 2751, 64, 7181, 9167, 5579, 

@@ -16,8 +16,9 @@ public class Exe {
     int gn = 128; // Gene number || 128 or 30
     int gl = 1; // Gene length
     double pc = 0.8; // Crossover probability
+    double pm = 0.2; // Crossover probability
     double tf = (double) 300500; // Target fitness beign sought
-    long MAX_STEPS = 50000;
+    long MAX_STEPS = 1000;
     int EXECUTIONS = 30;
     
     
@@ -35,7 +36,7 @@ public class Exe {
       // Sub list
       String[] execLog = new String[]{};
       // Create execution
-      exec = new Execution(exec_id,gn,gl,pc,tf,MAX_STEPS);
+      exec = new Execution(exec_id,gn,gl,pc,pm,tf,MAX_STEPS);
       // Run execution
       execLog = exec.run();
       // Apend to log list
