@@ -18,14 +18,14 @@ public class Execution {
     public Execution(int execId,int gn,int gl ,double pc, double pm,double tf,long max_steps) {
         GN = gn;
         GL = gl;
-        POP_SIZE = gn;
+        POP_SIZE = gn*2;
         PC = pc;
         // PM = 1 / (double) ((double) gn * (double) gl);
         PM = pm;
         TF = tf;
         MAX_STEPS = max_steps;
         EXEC_ID = execId;
-        CSV = new CsvManager("result"+execId,"executions/");
+        CSV = new CsvManager("result"+execId,"executions/","case1");
     }
 
     private void debug(Algorithm ga,int gn, int gl) throws Exception {
@@ -43,20 +43,14 @@ public class Execution {
     public String[] run() throws Exception {
         // Get initial time in miliseconds
         long startTime = System.currentTimeMillis();
-        System.out.print(POP_SIZE);
-        System.out.print(" - ");
-        System.out.print(PC);
-        System.out.print(" - ");
-        System.out.print(PM);
-        System.out.print(" - ");
-        // Create the problem
-        PROBLEM = new ProblemSubsetSum();
-        // Set problem properties
-        PROBLEM.set_geneN(GN);
-        PROBLEM.set_geneL(GL);
-        PROBLEM.set_target_fitness(TF);
-        // Create GA
-        GA = new Algorithm(PROBLEM, POP_SIZE, GN, GL, PC, PM);
+        
+        // Init problem subset sum
+        PROBLEM = new ProblemSubsetSum(); // Create the problem
+        PROBLEM.set_geneN(GN); // Set gene number to problem
+        PROBLEM.set_geneL(GL); // Set gene length to problem
+        PROBLEM.set_target_fitness(TF); // Set tarjet fitness to problem
+        
+        GA = new Algorithm(PROBLEM, POP_SIZE, GN, GL, PC, PM); // Create GA
 
         // Declare log stats
         List<String[]> execStepLog = new ArrayList<String[]>(); // create execution log list of step log arrays

@@ -23,8 +23,8 @@ public class CsvManager {
   private String CSV_PATH;
   private String CSV_FILE_NAME;
 
-  public CsvManager(String fileName, String path)  {
-    CSV_PATH = "ga/ssGA/src/"+path;
+  public CsvManager(String fileName, String path, String study_case)  {
+    CSV_PATH = "ga/../results/"+study_case+"/"+path;
     CSV_FILE_NAME = fileName + ".csv";
   }
 

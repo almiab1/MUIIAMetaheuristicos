@@ -21,10 +21,9 @@ public class Exe {
     long MAX_STEPS = 50000;
     int EXECUTIONS = 30;
     
-    
     // Log params
     Execution exec;
-    CsvManager csv = new CsvManager("result",""); // initialite csv manager
+    CsvManager csv = new CsvManager("result","","case1"); // initialite csv manager
     List<String[]> allExecLogs = new ArrayList<String[]>(); // Control executions
 
     // Add header to control list
@@ -33,14 +32,12 @@ public class Exe {
     
     // Run executions
     for (int exec_id = 1; exec_id <= EXECUTIONS; exec_id++) {
-      // Sub list
-      String[] execLog = new String[]{};
-      // Create execution
-      exec = new Execution(exec_id,gn,gl,pc,pm,tf,MAX_STEPS);
-      // Run execution
-      execLog = exec.run();
-      // Apend to log list
-      allExecLogs.add(execLog);
+      String[] execLog = new String[]{}; // Sub list
+
+      exec = new Execution(exec_id,gn,gl,pc,pm,tf,MAX_STEPS); // Create execution
+      execLog = exec.run(); // Run execution
+
+      allExecLogs.add(execLog); // Apend to log list
     }
     // Write to file
     csv.overwriteData(allExecLogs);
