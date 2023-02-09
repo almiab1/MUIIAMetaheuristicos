@@ -29,7 +29,7 @@ public class Execution {
     }
 
     private void debug(Algorithm ga,int gn, int gl) throws Exception {
-        System.out.print("Solution Step " + EXEC_ID + " ");
+        System.out.print("Solution Exec " + EXEC_ID + " ");
         // System.out.print("Allele: ");
         // for (int i = 0; i < gn * gl; i++)
         // {

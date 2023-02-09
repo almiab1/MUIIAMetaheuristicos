@@ -49,12 +49,12 @@ public class Algorithm
 
     p1 = (int)(r.nextDouble()*
                (double)popsize + 0.5); // Round and then trunc to int
-    
+
     if(p1>popsize-1) p1=popsize-1;
     do
     {  
       p2 = (int)(r.nextDouble()*
-                  (double)popsize + 0.5);  // Round and then trunc to int
+      (double)popsize + 0.5);  // Round and then trunc to int
       if(p2>popsize-1) p2=popsize-1;
     }
     while (p1==p2);
@@ -62,6 +62,16 @@ public class Algorithm
     return pop.get_ith(p1);
     else
     return pop.get_ith(p2);
+  }
+
+  // Roulette wheel selection (RW)
+  public Individual rw_selection() throws Exception
+  {
+    int p1, p2;
+
+    p1=0;
+    
+    return pop.get_ith(p1);
   }
 
   // SINGLE POINT CROSSOVER - ONLY ONE CHILD IS CREATED (RANDOMLY DISCARD 
