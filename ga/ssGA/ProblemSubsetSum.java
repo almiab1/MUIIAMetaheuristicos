@@ -75,8 +75,6 @@ public class ProblemSubsetSum extends Problem {
       fitness += indiv.get_allele(i)*subset[i];
     }
 
-
-
     if (fitness>C)
     {
       // System.out.print("Fitness is greater than C. " + fitness + " > " + C + " ");

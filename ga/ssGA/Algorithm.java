@@ -64,14 +64,17 @@ public class Algorithm
     return pop.get_ith(p2);
   }
 
+  private int calculate_prob (Individual indv) {
+    
+  }
+
   // Roulette wheel selection (RW)
   public Individual rw_selection() throws Exception
   {
     int p1, p2;
-
-    p1=0;
-    
-    return pop.get_ith(p1);
+    Individual aux_indiv = pop.get_ith(0);
+    calculate_prob(aux_indiv);
+    return aux_indiv;
   }
 
   // SINGLE POINT CROSSOVER - ONLY ONE CHILD IS CREATED (RANDOMLY DISCARD 
