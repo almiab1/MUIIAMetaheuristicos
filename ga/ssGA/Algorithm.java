@@ -183,7 +183,7 @@ public class Algorithm
   public void go_one_step() throws Exception
   {
     // Select two parents rw_selection & SPX
-    aux_indiv.assign( SPX(rw_selection(),rw_selection()) );
+    // aux_indiv.assign( SPX(rw_selection(),rw_selection()) );
     // Select two parents select_tournament & SPX
     aux_indiv.assign( SPX(select_tournament(),select_tournament()) );
     // Mutate & Evaluate

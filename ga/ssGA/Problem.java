@@ -19,6 +19,9 @@ public abstract class Problem                    // Maximization task
     protected double target_fitness;  	// Target fitness value -MAXIMUM-
     protected boolean tf_known;       	// Is the taret fitness known????
     protected static Random r = new Random();	// Random uniform variable
+
+    // UPDATE GENERATE RANDOM SET
+    protected int[] PROBLEM_SET;			// Population
     
     public Problem() {
         CL              = GN*GL; // Chromosome length
@@ -35,6 +38,10 @@ public abstract class Problem                    // Maximization task
     public double  get_target_fitness()  { return target_fitness;  }
     public boolean tf_known()            { return tf_known;        }
     
+    // UPDATE GENERATE RANDOM SET
+    public int[]  get_problem_set()  { return PROBLEM_SET;  }
+    public void    set_problem_set(int[] set)     { PROBLEM_SET = set; }
+
     public void    set_target_fitness(double tf) {
         target_fitness = tf;
         tf_known       = true;
@@ -46,6 +53,6 @@ public abstract class Problem                    // Maximization task
             return Evaluate(Indiv) ;
     } 
     
-    public abstract double Evaluate(Individual Indiv) ;
+    public abstract double Evaluate(Individual Indiv);
 }
 // END OF CLASS: Problem

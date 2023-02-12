@@ -14,8 +14,9 @@ public class Execution {
     private Algorithm GA;       // The ssGA being used
     private int EXEC_ID;        // Execution id
     private CsvManager CSV;     // Log manager
+    private int[] PROBLEM_SET;
 
-    public Execution(int execId,int gn,int gl ,double pc, double pm,double tf,long max_steps) {
+    public Execution(int execId,int gn,int gl ,double pc, double pm,double tf,long max_steps, int[] problem_set) {
         GN = gn;
         GL = gl;
         POP_SIZE = gn;
@@ -25,6 +26,7 @@ public class Execution {
         TF = tf;
         MAX_STEPS = max_steps;
         EXEC_ID = execId;
+        PROBLEM_SET = problem_set;
         CSV = new CsvManager("result"+execId,"executions/","case1");
     }
 
@@ -49,7 +51,8 @@ public class Execution {
         PROBLEM.set_geneN(GN); // Set gene number to problem
         PROBLEM.set_geneL(GL); // Set gene length to problem
         PROBLEM.set_target_fitness(TF); // Set tarjet fitness to problem
-        
+        PROBLEM.set_problem_set(PROBLEM_SET); // Set problem set of numbers to problem
+
         GA = new Algorithm(PROBLEM, POP_SIZE, GN, GL, PC, PM); // Create GA
 
         // Declare log stats
