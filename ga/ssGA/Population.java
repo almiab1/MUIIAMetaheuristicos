@@ -22,6 +22,7 @@ public class Population
   private double  avgf;  // The average fitness of the present population
   private double  worstf;// The worst fitness of the present population
   private double  BESTF; // The best fitness ever found during the search
+  private double totalf; // The sum of all pop fitness
 
 
 
@@ -120,6 +121,23 @@ public double get_BESTF()  { return BESTF;  }
     System.out.print(worstf); System.out.print("   ");
     System.out.print(bestp);  System.out.print("   ");
     System.out.println(worstp);
+  }
+
+  // UPDATE FOR RW SELECTION
+  public double get_totalf() {
+    return totalf;
+  }
+
+  public void set_totalf(double totalf) {
+    this.totalf = totalf;
+  }
+
+  public void calc_total_fitness () throws Exception {
+    double sum = 0;
+    for (int i = 0; i < popsize; i++) {
+      sum += pop[i].get_fitness();
+    }
+    set_totalf(sum);
   }
 
 }

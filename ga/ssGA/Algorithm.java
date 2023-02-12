@@ -7,6 +7,8 @@
 
 package ga.ssGA;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class Algorithm
@@ -64,17 +66,56 @@ public class Algorithm
     return pop.get_ith(p2);
   }
 
-  private int calculate_prob (Individual indv) {
-    
+  // ROULETTE WHEEL SELECTION UPDATE
+  // --------------------------------------------------------------------------
+  // Calculate individual probability auxiliar function
+  private double calculate_prob (Individual indv, double total_fitness) {
+    double prob = indv.get_fitness() / total_fitness;
+    return prob;
   }
+  // Generate random array auxiliar function
+  public static int[] generateRandomIndexArray(int size) {
+    ArrayList<Integer> numbers = new ArrayList<>();
+    for (int i = 1; i <= size; i++) {
+        numbers.add(i);
+    }
+
+    Collections.shuffle(numbers, new Random());
+    int[] result = new int[numbers.size()];
+    for (int i = 0; i < result.length; i++) {
+        result[i] = numbers.get(i);
+    }
+
+    return result;
+}
 
   // Roulette wheel selection (RW)
   public Individual rw_selection() throws Exception
   {
-    int p1, p2;
-    Individual aux_indiv = pop.get_ith(0);
-    calculate_prob(aux_indiv);
-    return aux_indiv;
+    // Get random number between 0 and 1
+    double rand = r.nextDouble();
+    // Get total population fitness
+    pop.calc_total_fitness();
+    double total_fitness = pop.get_totalf();
+
+    // Generate random index individuals array
+    int[] randomArray = generateRandomIndexArray(popsize);
+
+    // Iterate over individuals
+    for(int i : randomArray) {
+      // Get individual
+      Individual indv = pop.get_ith(i); 
+      // Calculate i individual probability
+      double indv_prob = calculate_prob(indv, total_fitness);
+
+      // Check if ball is in this individual probability
+      if(rand < indv_prob) {
+        return indv;
+      }
+      rand -= indv_prob;
+    }
+
+    throw new RuntimeException("Roulettewheel selection failed to select an individual");
   }
 
   // SINGLE POINT CROSSOVER - ONLY ONE CHILD IS CREATED (RANDOMLY DISCARD 
@@ -141,7 +182,11 @@ public class Algorithm
 
   public void go_one_step() throws Exception
   {
+    // Select two parents rw_selection & SPX
+    aux_indiv.assign( SPX(rw_selection(),rw_selection()) );
+    // Select two parents select_tournament & SPX
     aux_indiv.assign( SPX(select_tournament(),select_tournament()) );
+    // Mutate & Evaluate
     aux_indiv.set_fitness(problem.evaluateStep(mutate(aux_indiv)));
     replace(aux_indiv);
   }

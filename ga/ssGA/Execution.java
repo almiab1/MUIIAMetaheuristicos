@@ -18,7 +18,7 @@ public class Execution {
     public Execution(int execId,int gn,int gl ,double pc, double pm,double tf,long max_steps) {
         GN = gn;
         GL = gl;
-        POP_SIZE = gn*2;
+        POP_SIZE = gn;
         PC = pc;
         // PM = 1 / (double) ((double) gn * (double) gl);
         PM = pm;
