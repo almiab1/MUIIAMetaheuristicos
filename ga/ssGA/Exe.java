@@ -7,13 +7,14 @@
 
 package ga.ssGA;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Exe {  
   // Generate a set of natural numbers between 1 and size "s" (inclusive) that are not repeated.
-  public static int[] generate_problem_set(int size, int bound) {
+  private static int[] generate_problem_set(int size, int bound) {
     List<Integer> result = new java.util.ArrayList<Integer>();
     Random r = new Random();
     for (int i = 0; i < size; i++) {
@@ -28,49 +29,117 @@ public class Exe {
     return prob_set;
   }
 
-  // TODO: get rando solution number - C
+  // Get random solution number - C
+  private static double get_C(int[] problem_set) {
+    double C = 0;
+    for (int i = 0; i < problem_set.length; i++) {
+      int binary = (int) (Math.round(Math.random()));
+      C += problem_set[i] * binary;
+    }
+    return C;
+  }
+
+  // Write problem_set to file
+  private static void write_problem_set (int[] problem_set, String folder_path, String file_name) throws IOException {
+    // Convert problem_set to String[]
+    String[] problem_set_str = new String[problem_set.length];
+    for (int i = 0; i < problem_set.length; i++) {
+      problem_set_str[i] = Integer.toString(problem_set[i]);
+    }
+
+    List<String[]> problem_set_list = new ArrayList<String[]>();
+    problem_set_list.add(problem_set_str);
+
+    // Write problem_set to file
+    CsvManager manager = new CsvManager();
+    manager.overwriteData(problem_set_list, folder_path, file_name);
+  }
+
+  // Read problem_set from file
+  private static int[] read_problem_set (String folder_path, String file_name) throws Exception {
+    int[] problem_set = null;
+    List<String[]> problem_set_list;
+
+    // Write problem_set to file
+    CsvManager manager = new CsvManager();
+    problem_set_list = manager.readAllDataAtOnce(folder_path,file_name);
+
+    // Convert problem_set_list (List<String[]>) to int[]
+    String[] problem_set_str = problem_set_list.get(0);
+    problem_set = new int[problem_set_str.length];
+
+    for (int i = 0; i < problem_set_str.length; i++) {
+      problem_set[i] = Integer.parseInt(problem_set_str[i]);
+    }
+
+    return problem_set;
+  }
+
+  // Read problem_set from file
+  private static double read_C (String folder_path, String file_name) throws Exception {
+    // Write problem_set to file
+    List<String[]> c_list;
+    CsvManager manager = new CsvManager();
+    c_list = manager.readAllDataAtOnce(folder_path,file_name);
+
+    // Convert problem_set_list (List<String[]>) to int[]
+    String[] c_str = c_list.get(0);
+    double C = Double.parseDouble(c_str[0]);
+
+    return C;
+  }
+  
+  // Write problem_C to file
+  private static void write_problem_C (double tarjet, String folder_path, String file_name) throws IOException {
+    // Convert tarjet to String[]
+    String[] tarjet_str = new String[1];
+    tarjet_str[0] = Double.toString(tarjet);
+    
+    List<String[]> tarjet_list = new ArrayList<String[]>();
+    tarjet_list.add(tarjet_str);
+    
+    // Write problem_C to file
+    CsvManager manager = new CsvManager();
+    manager.overwriteData(tarjet_list, folder_path, file_name);
+  }
 
   public static void main(String args[]) throws Exception {
     // PARAMETERS SUBSETSUM
-    int gn = 100; // Gene number || 128 or 30
+    int gn = 10000; // Gene number (problem set size)
     int gl = 1; // Gene length
-    double pc = 0.8; // Crossover probability
-    double pm = 0.2; // Crossover probability
-    double tf = (double) 300500; // Target fitness beign sought
-    long max_steps = 50000;
-    int EXECUTIONS = 30;
-
-    // int[] problem_set={2902, 5235, 357, 6058, 4846, 8280, 1295, 181, 3264,
-    //         7285, 8806, 2344, 9203, 6806, 1511, 2172, 843, 4697,
-    //         3348, 1866, 5800, 4094, 2751, 64, 7181, 9167, 5579,
-    //         9461, 3393, 4602, 1796, 8174, 1691, 8854, 5902, 4864,
-    //         5488, 1129, 1111, 7597, 5406, 2134, 7280, 6465, 4084,
-    //         8564, 2593, 9954, 4731, 1347, 8984, 5057, 3429, 7635,
-    //         1323, 1146, 5192, 6547, 343, 7584, 3765, 8660, 9318,
-    //         5098, 5185, 9253, 4495, 892, 5080, 5297, 9275, 7515,
-    //         9729, 6200, 2138, 5480, 860, 8295, 8327, 9629, 4212,
-    //         3087, 5276, 9250, 1835, 9241, 1790, 1947, 8146, 8328,
-    //         973, 1255, 9733, 4314, 6912, 8007, 8911, 6802, 5102,
-    //         5451, 1026, 8029, 6628, 8121, 5509, 3603, 6094, 4447,
-    //         683, 6996, 3304, 3130, 2314, 7788, 8689, 3253, 5920,
-    //         3660, 2489, 8153, 2822, 6132, 7684, 3032, 9949, 59,
-    //         6669, 6334};
-    int[] problem_set = generate_problem_set(gn, (int) (gn * 1.5));
-
-    System.out.println("Problem set: ");
-    for (int i = 0; i < problem_set.length; i++) {
-      System.out.print(problem_set[i] + " ");
-    }
+    double pc = 0.55; // Crossover probability
+    double pm = 0.50; // Mutation probability
+    double tf = (double) 0; // Target fitness beign sought
+    long max_steps = 50000; // Max steps to iterate execution
+    int EXECUTIONS = 30; // N Executions to run
     
-    // Log params
+    // Generate problem set
+    int[] problem_set;
+    String folder_path_set = "problems/z"+gn+"/";
+    String file_name_set = "problemset";
+    // problem_set = generate_problem_set(gn, (int) (gn * 1.5));
+    // write_problem_set(problem_set,folder_path_set, file_name_set);
+    problem_set = read_problem_set(folder_path_set, file_name_set);
+
+    // Get & Set - C
+    String folder_path_C = "problems/z"+gn+"/";
+    String file_name_C = "tarjet";
+    // double C = get_C(problem_set);
+    // write_problem_C(C,folder_path_C, file_name_C);
+    double C = read_C(folder_path_C, file_name_C);
+    tf = C; // Set tarjet fitness
+
+    // Declare execution manager
     Execution exec;
-    CsvManager csv = new CsvManager("result","","case1"); // initialite csv manager
+
+    // Log params
+    CsvManager csvResults = new CsvManager(); // initialite csv manager
     List<String[]> allExecLogs = new ArrayList<String[]>(); // Control executions
 
     // Add header to control list
     String[] header = new String[] {"exec","bestf","worstf","avgf","endstep","duration"}; // declare header
     allExecLogs.add(header); // add headers to list
-    
+
     // Run executions
     for (int exec_id = 1; exec_id <= EXECUTIONS; exec_id++) {
       String[] execLog = new String[]{}; // Sub list
@@ -81,7 +150,7 @@ public class Exe {
       allExecLogs.add(execLog); // Apend to log list
     }
     // Write to file
-    csv.overwriteData(allExecLogs);
+    csvResults.overwriteData(allExecLogs, "case1/z"+gn+"/mediumprob/","result");
   } // end main
 }
 // END OF CLASS: Exe

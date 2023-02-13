@@ -6,11 +6,15 @@
 
 package ga.ssGA;
 
+import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvException;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  *
@@ -19,18 +23,16 @@ import java.util.List;
  */
 
 public class CsvManager {
-  
-  private String CSV_PATH;
-  private String CSV_FILE_NAME;
 
-  public CsvManager(String fileName, String path, String study_case)  {
-    CSV_PATH = "ga/../results/"+study_case+"/"+path;
-    CSV_FILE_NAME = fileName + ".csv";
+  private String SRC_PATH;
+
+  public CsvManager()  {
+    SRC_PATH = "ga/../src/";
   }
 
-  public void overwriteData(List<String[]> data) throws IOException {
+  public void overwriteData(List<String[]> data, String folder_path, String file_name) throws IOException {
     // Define file path
-    String filePath = CSV_PATH + CSV_FILE_NAME;
+    String filePath = SRC_PATH + folder_path + file_name + ".csv";
 
     try (
       // Declare file writer
@@ -44,9 +46,33 @@ public class CsvManager {
     ) {
       // Write data into csv
       csvWriter.writeAll(data);
-      // csvWriter.close(); //close the writer
+      // csvWriter.flush();
+      // csvWriter.close();
     }
   } // end overwriteData
+
+  public List<String[]> readAllDataAtOnce(String folder_path, String file_name) throws IOException
+  {
+    // Define file path
+    String file_path = SRC_PATH + folder_path + file_name + ".csv";
+    List<String[]> allData = new ArrayList<String[]>();
+
+    String line = "";
+    String cvsSplitBy = ","; // Separador de valores en el archivo CSV
+
+    try (BufferedReader br = new BufferedReader(new FileReader(file_path))) {
+      while ((line = br.readLine()) != null) {
+        // Usa el separador para dividir la línea en valores individuales
+        String[] values = line.split(cvsSplitBy);
+
+        allData.add(values);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return allData;
+  }
 } // END OF CLASS: CsvManager
 
 

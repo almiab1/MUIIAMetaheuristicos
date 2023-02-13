@@ -27,7 +27,7 @@ public class Execution {
         MAX_STEPS = max_steps;
         EXEC_ID = execId;
         PROBLEM_SET = problem_set;
-        CSV = new CsvManager("result"+execId,"executions/","case1");
+        CSV = new CsvManager();
     }
 
     private void debug(Algorithm ga,int gn, int gl) throws Exception {
@@ -89,8 +89,8 @@ public class Execution {
         // Print the solution
         debug(GA,GN,GL);
         
-        // Save log to this execution log file (./src/executions/result<execid>.csv)
-        CSV.overwriteData(execStepLog);
+        // Save log to this execution log file
+        CSV.overwriteData(execStepLog,"case1/z"+GN+"/mediumprob/executions/","result"+EXEC_ID);
         
         // Get execution time
         long endTime = System.currentTimeMillis(); // get end time in miliseconds
