@@ -68,11 +68,6 @@ public class Algorithm
 
   // ROULETTE WHEEL SELECTION UPDATE
   // --------------------------------------------------------------------------
-  // Calculate individual probability auxiliar function
-  private double calculate_prob (Individual indv, double total_fitness) {
-    double prob = indv.get_fitness() / total_fitness;
-    return prob;
-  }
   // Generate random array auxiliar function
   public static int[] generateRandomIndexArray(int size) {
     ArrayList<Integer> numbers = new ArrayList<>();
@@ -94,28 +89,36 @@ public class Algorithm
   {
     // Get random number between 0 and 1
     double rand = r.nextDouble();
+    double min_bound = 0.001;
+    
     // Get total population fitness
     pop.calc_total_fitness();
     double total_fitness = pop.get_totalf();
 
     // Generate random index individuals array
-    int[] randomArray = generateRandomIndexArray(popsize);
+    // int[] randomArray = generateRandomIndexArray(popsize);
 
     // Iterate over individuals
-    for(int i : randomArray) {
-      // Get individual
-      Individual indv = pop.get_ith(i); 
+    do {
+      int indx = r.nextInt(popsize); // get random index
+      Individual indv = pop.get_ith(indx); // Get individual
+
       // Calculate i individual probability
-      double indv_prob = calculate_prob(indv, total_fitness);
+      double indv_prob = indv.get_fitness() / total_fitness;
 
       // Check if ball is in this individual probability
       if(rand < indv_prob) {
         return indv;
       }
-      rand -= indv_prob;
-    }
-
-    throw new RuntimeException("Roulettewheel selection failed to select an individual");
+      
+      if (rand > min_bound) {
+        rand -= indv_prob;
+      } else {
+        rand = min_bound;
+      }
+    } while (true);
+    
+    // throw new RuntimeException("Roulettewheel selection failed to select an individual");
   }
 
   // SINGLE POINT CROSSOVER - ONLY ONE CHILD IS CREATED (RANDOMLY DISCARD 
@@ -183,9 +186,9 @@ public class Algorithm
   public void go_one_step() throws Exception
   {
     // Select two parents rw_selection & SPX
-    // aux_indiv.assign( SPX(rw_selection(),rw_selection()) );
+    aux_indiv.assign( SPX(rw_selection(),rw_selection()) );
     // Select two parents select_tournament & SPX
-    aux_indiv.assign( SPX(select_tournament(),select_tournament()) );
+    // aux_indiv.assign( SPX(select_tournament(),select_tournament()) );
     // Mutate & Evaluate
     aux_indiv.set_fitness(problem.evaluateStep(mutate(aux_indiv)));
     replace(aux_indiv);
