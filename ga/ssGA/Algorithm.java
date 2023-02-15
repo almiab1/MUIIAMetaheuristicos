@@ -71,7 +71,7 @@ public class Algorithm
   // Generate random array auxiliar function
   public static int[] generateRandomIndexArray(int size) {
     ArrayList<Integer> numbers = new ArrayList<>();
-    for (int i = 1; i <= size; i++) {
+    for (int i = 0; i < size; i++) {
         numbers.add(i);
     }
 
@@ -89,36 +89,30 @@ public class Algorithm
   {
     // Get random number between 0 and 1
     double rand = r.nextDouble();
-    double min_bound = 0.001;
     
     // Get total population fitness
     pop.calc_total_fitness();
     double total_fitness = pop.get_totalf();
 
     // Generate random index individuals array
-    // int[] randomArray = generateRandomIndexArray(popsize);
+    int[] randIndexPop = generateRandomIndexArray(popsize);
 
     // Iterate over individuals
-    do {
-      int indx = r.nextInt(popsize); // get random index
-      Individual indv = pop.get_ith(indx); // Get individual
-
+    for(int i = 0; i < randIndexPop.length; i++) {
+      // Get individual
+      Individual indv = pop.get_ith(randIndexPop[i]); 
       // Calculate i individual probability
       double indv_prob = indv.get_fitness() / total_fitness;
 
       // Check if ball is in this individual probability
-      if(rand < indv_prob) {
+      if(rand < indv_prob || rand < 0 || i == randIndexPop.length) {
         return indv;
       }
-      
-      if (rand > min_bound) {
-        rand -= indv_prob;
-      } else {
-        rand = min_bound;
-      }
-    } while (true);
+
+      rand -= indv_prob;
+    }
     
-    // throw new RuntimeException("Roulettewheel selection failed to select an individual");
+    throw new RuntimeException("Roulettewheel selection failed to select an individual");
   }
 
   // SINGLE POINT CROSSOVER - ONLY ONE CHILD IS CREATED (RANDOMLY DISCARD 
