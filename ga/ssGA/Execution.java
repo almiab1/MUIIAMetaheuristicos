@@ -90,7 +90,7 @@ public class Execution {
         debug(GA,GN,GL);
         
         // Save log to this execution log file | highprob | mediumprob | lowprob
-        CSV.overwriteData(execStepLog,"case2/z"+GN+"/lowprob/executions/","result"+EXEC_ID);
+        CSV.overwriteData(execStepLog,"case2/z"+GN+"/highprob/executions/","result"+EXEC_ID);
         
         // Get execution time
         long endTime = System.currentTimeMillis(); // get end time in miliseconds

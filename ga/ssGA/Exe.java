@@ -105,10 +105,10 @@ public class Exe {
 
   public static void main(String args[]) throws Exception {
     // PARAMETERS SUBSETSUM
-    int gn = 10000; // Gene number (problem set size)
+    int gn = 10000; // Gene number (problem set size) || 100 - 1000 - 10000
     int gl = 1; // Gene length
-    double pc = 0.35; // Crossover probability
-    double pm = 0.25; // Mutation probability
+    double pc = 0.80; // Crossover probability | 35 - 55 - 80
+    double pm = 0.80; // Mutation probability | 25 - 50 - 80
     double tf = (double) 0; // Target fitness beign sought
     long max_steps = 50000; // Max steps to iterate execution
     int EXECUTIONS = 30; // N Executions to run
@@ -150,7 +150,7 @@ public class Exe {
       allExecLogs.add(execLog); // Apend to log list
     }
     // Save log to this execution log file | highprob | mediumprob | lowprob
-    csvResults.overwriteData(allExecLogs, "case2/z"+gn+"/lowprob/","result");
+    csvResults.overwriteData(allExecLogs, "case2/z"+gn+"/highprob/","result");
   } // end main
 }
 // END OF CLASS: Exe
